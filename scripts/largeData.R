@@ -42,8 +42,9 @@ class(extracaoLD_exercicio2)
 extracaoLD_exercicio2
 
 sum(extracaoLD_exercicio2[,7])
-mean(extracaoLD_exercicio2)
+mean(extracaoLD_exercicio2$b)
 
-extracaoLD_exercicio2amostra <- extracaoLD_exercicio2[sample(nrow(extracaoLD4), 100000) , ]
+extracaoLD_exercicio2amostra <- extracaoLD_exercicio2[sample(nrow(extracaoLD_exercicio2), 100000) , ]
 
 lm(c ~ ., extracaoLD_exercicio2amostra)
+
