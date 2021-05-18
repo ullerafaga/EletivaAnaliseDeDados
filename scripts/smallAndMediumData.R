@@ -80,3 +80,7 @@ write.table(largeData_exercicio,"bases_originais/largeData_exercicio.csv",sep=",
 system.time(extracaoLD_exercicio <- fread("bases_originais/largeData_exercicio.csv"))
 
 extracaoLD_exercicio
+
+#eficiencia 
+#  user  system elapsed 
+#  3.593   1.423  11.821 
