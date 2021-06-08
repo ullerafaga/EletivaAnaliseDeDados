@@ -33,17 +33,21 @@ facebook %>% rename(Reach = Lifetime.Post.Total.Reach)
 
 
 # sumários
-count(USArrests) 
+
+iris_df <- iris
+count(irisdf) 
+
+iris_df
 
 # sumários com agrupamentos
-USArrestsFactor %>% group_by(Rape) %>% summarise(avg = mean(like))
+iris_df %>% group_by(Species) %>% summarise(avg = mean(Sepal.Length))
 
 ### Transformação de Casos
 
 # seleção de casos
-USArrests %>%  filter(Type != Rape) %>% summarise(avg = mean(like))
-USArrests %>%  filter(Type != Rome) %>% group_by(Type, Paid) %>% summarise(avg = mean(like))
+iris_df <- iris
+iris_df %>% filter(Species != "versicolor") %>% group_by(Species, Sepal.Length) %>% summarise(avg = mean(Petal.Length))
 
-# ordenar casos
-arrange(USArrests, like) # ascendente
-arrange(fUSArrests, desc(like)) # descendente
+#coluna, criando uma variável index
+index_iris_df <- seq(length(iris_df), 146)
+iris_df <- cbind(iris_df, index_iris_df)
