@@ -1,0 +1,46 @@
+# instalacao dos pacotes ####
+install.packages('fuzzyjoin')
+
+# script 1 do professor ####
+library(fuzzyjoin)
+
+# Exemplo universidade de princeton
+baseA <- read.csv("http://www.princeton.edu/~otorres/sandp500.csv")
+baseB <- read.csv("http://www.princeton.edu/~otorres/nyse.csv") 
+
+# Advanced
+baseC <- fuzzyjoin::stringdist_join(baseA, baseB, mode='left')
+baseC <- fuzzyjoin::distance_join(baseA, baseB, mode='left')
+
+# script 2 do professor ####
+library(electionsBR)
+library(dplyr)
+library(tidyr)
+
+?electionsBR
+
+tse20 <- vote_mun_zone_local(year = 2020)
+View(tse20)
+
+partidos_bolsonaro <- c("AVANTE", 'DC', "DEM", 'MDB', 'NOVO', 'PATRI', 'PL', 'PODE', 'PP', 'PROS', 'PRTB', 'PSC', 'PSD', 'PSDB', 'PSL', 'PTB', 'SD')
+
+tse20A1 <- tse20 %>% filter(DESCRICAO_CARGO == 'Prefeito' & NUM_TURNO == 1)
+
+tse20A1 <- tse20A1 %>% mutate(tag_partido = ifelse(grepl(paste(partidos_bolsonaro, collapse="|"), COMPOSICAO_LEGENDA), 'bolso_t1', 'nao_bolso_t1'))
+
+# resolucao do exercicio ####
+# Compartilhe com a gente um código criado por você em que você junta duas bases por nomes não categorizados e, em seguida, realiza uma busca por determinados textos em uma das colunas. Atenção: a base de dados pode ser simulada! não precisa ser real.
+
+install.packages("readxl")
+library(readxl)
+base1 <- read_excel('populacao_municipio_2020.xls')
+View(base1) 
+base2 <- as.data.frame(read.csv('votacao_partido_munzona_2020_BRASIL.csv', sep = ';'))
+View(base2)
+
+base3 <- fuzzyjoin::stringdist_join(base1, base2, mode='left')
+View(base3)
+
+base4 <- base3 %>% mutate(GOIAS = ifelse(grepl(paste("GO", collapse="|"), SG_UF), '1', '0'))
+
+View(base4)
