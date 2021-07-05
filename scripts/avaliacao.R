@@ -1,18 +1,18 @@
-# 1. Extraia a base geral de covid em Pernambuco disponível neste endereço: https://dados.seplag.pe.gov.br/apps/corona_dados.html.
+# 1. Extraia a base geral de covid em Pernambuco disponÃ­vel neste endereÃ§o: https://dados.seplag.pe.gov.br/apps/corona_dados.html.
 
 #install.packages("curl")
 library(curl)
 covid_PE_avaliacao <- read.csv( curl( url = "https://dados.seplag.pe.gov.br/apps/basegeral.csv", open = "", handle = new_handle( ) ), sep = ";", encoding = "UTF-8" )
 View(covid_PE_avaliacao)
 
-#2. Calcule, para cada município do Estado, o total de casos confirmados e o total de óbitos por semana epidemiológica [atenção, você terá de criar uma variável de semana epidemiológica com base na data].
+#2. Calcule, para cada municÃ­pio do Estado, o total de casos confirmados e o total de Ã³bitos por semana epidemiolÃ³gica [atenÃ§Ã£o, vocÃª terÃ¡ de criar uma variÃ¡vel de semana epidemiolÃ³gica com base na data].
 s
 # criando a variavel da semana epidemiologica
 #install.packages ("lubridate")
 library(lubridate)
 covid_PE_avaliacao$semana_epi <- epiweek(covid_PE_avaliacao$dt_notificacao)
 
-# calculando o total de confirmados e o total de óbitos por semana epidemiológica para cada município
+# calculando o total de confirmados e o total de Ã³bitos por semana epidemiolÃ³gica para cada municÃ­pio
 
 #install.packages("tidyverse")
 library(tidyverse)
@@ -25,9 +25,9 @@ covid_PE_avaliacao_obito <- covid_PE_avaliacao %>% count(semana_epi, municipio, 
 covid_PE_avaliacao_obito <- subset(covid_PE_avaliacao_obito, evolucao == "OBITO")
 View(covid_PE_avaliacao_obito)
 
-#3. Enriqueça a base criada no passo 2 com a população de cada município, usando a tabela6579 do sidra ibge.
+#3. EnriqueÃ§a a base criada no passo 2 com a populaÃ§Ã£o de cada municÃ­pio, usando a tabela6579 do sidra ibge.
 
-#importante, modifiquei manualmente a tabela6579 para facilitar o manuseio no R. Retirei a populacao brasileira, e substitui as duas primeiras linhas por uma linha com "municipio" e "populacao" nas duas primeiras c�lulas, respectivamente
+#importante, modifiquei manualmente a tabela6579 para facilitar o manuseio no R. Retirei a populacao brasileira, e substitui as duas primeiras linhas por uma linha com "municipio" e "populacao" nas duas primeiras células, respectivamente
 
 #install.packages("readxl")
 #install.packages("stringi")
@@ -49,12 +49,9 @@ tabela6579$municipio<- sti_trans_general (tabela6579$municipio, "Latin-ASCII")
 tabela6579$municipio <- substr(tabela6579$municipio,1,nchar(tabela6579$municipio)-5)
 View(tabela6579)
 
-covid_PE_avaliacao$municipio <- tolower(covid_PE_avaliacao$municipio)
-covid_PE_avaliacao$municipio <- str_to_title(covid_PE_avaliacao$municipio)
-
 covid_PE_avaliacao <- regex_join(covid_PE_avaliacao, tabela6579, by = "municipio", ignore_case = TRUE)
 
-#4. Calcule a incidência (casos por 100.000 habitantes) e letalidade (óbitos por 100.000 habitantes) por município a cada semana epidemiológica.
+#4. Calcule a incidÃªncia (casos por 100.000 habitantes) e letalidade (Ã³bitos por 100.000 habitantes) por municÃ­pio a cada semana epidemiolÃ³gica.
 
 covid_PE_avaliacao_confirmado_pop <- regex_join(covid_PE_avaliacao_confirmado, tabela6579, by = "municipio", ignore_case = TRUE)
 View(covid_PE_avaliacao_confirmado_pop)
